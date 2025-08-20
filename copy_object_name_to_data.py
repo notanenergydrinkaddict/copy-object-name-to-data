@@ -20,7 +20,10 @@ class OBJECT_OT_copy_object_name_to_data(Operator):
 
     def execute(self, context: Context) -> set[str]:
         # Get the valid object IDs from the Outliner selection.
-        objects: list[Object] = [cast(Object, id) for id in context.selected_ids if id.id_type == "OBJECT"]
+        if bpy.app.version >= (4, 0, 0):
+            objects: list[Object] = [cast(Object, id) for id in context.selected_ids if id.id_type == "OBJECT"]
+        else:
+            objects: list[Object] = list(context.selected_objects)
 
         if self.invert:
             self.copy_data_name_to_object(objects)
